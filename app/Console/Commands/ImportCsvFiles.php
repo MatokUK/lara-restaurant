@@ -6,6 +6,7 @@ use App\Console\Command\RecordConverter\DataTypeA;
 use App\Console\Command\RecordConverter\DataTypeB;
 use App\Csv\Reader;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
 
 class ImportCsvFiles extends Command
 {
@@ -14,7 +15,7 @@ class ImportCsvFiles extends Command
      *
      * @var string
      */
-    protected $signature = 'slido:read:csv';
+    protected $signature = 'slido:read:csv {--t|truncate}';
 
     /**
      * The console command description.
@@ -41,10 +42,11 @@ class ImportCsvFiles extends Command
     public function handle()
     {
         $this->line("Import command is running");
-       /* if ($input->getOption('truncate')) {
-            $output->writeln('<comment>Truncating data...</comment>');
-            $this->restaurantRepository->deleteAll();
-        }*/
+        if ($this->option('truncate')) {
+            $this->comment('Truncating data...');
+            DB::table('restaurant')->delete();
+        }
+
         $this->line("Importing first file");
         $this->importCsvDataA(__DIR__.'/../../../csv-data/restaurants-hours-source-1.csv');
         $this->line("Importing second file");
