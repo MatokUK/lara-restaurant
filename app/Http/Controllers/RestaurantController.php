@@ -43,7 +43,7 @@ class RestaurantController extends Controller
 
     private function getRestaurantList(Request $request, RestaurantRepository $restaurantRepository)
     {
-        $searchTerm = $request->query->get('s', '');
+        $searchTerm = (string) $request->query->get('s', '');
         $restaurantDate = null;
         if (0 === $request->query->getInt('closed', 0)) {
             $restaurantDate = new RestaurantDate();
